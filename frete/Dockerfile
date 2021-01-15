@@ -8,9 +8,10 @@ RUN apt-get update && apt-get install -y \
     python3-setuptools \
     && rm -rf /var/lib/apt/lists/*
 
-COPY . /code
+COPY requirements.txt /code
+RUN pip3 install --no-cache-dir -r requirements.txt
 
-RUN pip3 install .
+COPY . /code
 
 ENV LANG C.UTF-8
 
