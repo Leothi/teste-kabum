@@ -7,13 +7,13 @@ from api.models import SuccessResponse
 class DimensaoBase(BaseModel):
     """ Modelo base para dimensão """
     altura: int = Field(..., description="Altura de entrada (cm).", example=102)
-    largura: int = Field(..., description="Largura de entrada (g).", example=40)
+    largura: int = Field(..., description="Largura de entrada (cm).", example=40)
 
 
 class FreteInput(BaseModel):
     """ Modelo para Input de frete """
     dimensao: DimensaoBase
-    peso: int = Field(..., description="Peso de entrada.", example=400)
+    peso: int = Field(..., description="Peso de entrada (g).", example=400)
 
 
 class FreteBase(BaseModel):
