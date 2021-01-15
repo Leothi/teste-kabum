@@ -1,3 +1,5 @@
+from loguru import logger
+
 class CalculadorFrete():
     cfg_frete = {
         'ninja': {
@@ -23,20 +25,21 @@ class CalculadorFrete():
 
     @classmethod
     def validar(cls, dimensao: dict, peso: int) -> list:
+        logger.info("Validando dimensões do produto.")
         tipos_validos = []
         cfg_dict = cls.cfg_frete
 
-        if peso <= 0:
-            return tipos_validos
+        if not peso <= 0:
 
-        for key, value in cfg_dict.items():
+            for key, value in cfg_dict.items():
 
-            altura_valida = cfg_dict[key]['altura_min'] <= dimensao['altura'] <= cfg_dict[key]['altura_max']
-            largura_valida = cfg_dict[key]['largura_min'] <= dimensao['largura'] <= cfg_dict[key]['largura_max']
+                altura_valida = cfg_dict[key]['altura_min'] <= dimensao['altura'] <= cfg_dict[key]['altura_max']
+                largura_valida = cfg_dict[key]['largura_min'] <= dimensao['largura'] <= cfg_dict[key]['largura_max']
 
-            if altura_valida and largura_valida:
-                tipos_validos.append(key)
+                if altura_valida and largura_valida:
+                    tipos_validos.append(key)
 
+        logger.debug('Validação concluída.')
         return tipos_validos
 
     @classmethod
@@ -44,16 +47,23 @@ class CalculadorFrete():
         tipos_validos = cls.validar(**body)
         lista_fretes = []
 
-        for tipo in tipos_validos:
-            cte_frete = cls.cfg_frete[tipo]['cte_frete']
-            frete = cte_frete * body['peso'] / 10
+        if tipos_validos:
+        
+            logger.info("Criando lista de fretes.")
+            for tipo in tipos_validos:
+                cte_frete = cls.cfg_frete[tipo]['cte_frete']
+                frete = cte_frete * body['peso'] / 10
 
-            cfg_dict = cls.cfg_frete
-            dict_frete = {
-                'nome': cfg_dict[tipo]['nome'],
-                'valor_frete': frete,
-                'prazo_dias': cfg_dict[tipo]['prazo_dias']
-            }
+                cfg_dict = cls.cfg_frete
+                dict_frete = {
+                    'nome': cfg_dict[tipo]['nome'],
+                    'valor_frete': frete,
+                    'prazo_dias': cfg_dict[tipo]['prazo_dias']
+                }
 
-            lista_fretes.append(dict_frete)
+                lista_fretes.append(dict_frete)
+            
+            logger.success("Lista criada.")
+        else:
+            logger.success("Dimensões inválidas para os fretes atuais.")
         return lista_fretes

@@ -4,10 +4,10 @@ services:
 
   api:
     build:
-      context: ./mercado_btc_monitor
+      context: ./frete
       dockerfile: Dockerfile
     volumes:
-      - ./mercado_btc_monitor:/code
+      - ./frete:/code
     environment:
       LOG_LOCAL: "True" # Desabilita logging externo de IP, id
       LOGGER_SWAGGER: "False" # Desabilita logging para /docs /favicon etc
@@ -20,19 +20,6 @@ services:
       - 8080:8080
     networks:
       - backend
-
-  bot:
-    build:
-      context: ./telegram_bot
-      dockerfile: Dockerfile
-    volumes:
-      - ./telegram_bot:/code
-    ports:
-      - 8000:8000
-    networks:
-      - backend
-    depends_on: 
-      - api
 
 networks:
   backend:
