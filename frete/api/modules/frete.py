@@ -34,15 +34,17 @@ class CalculadorFrete():
         :type peso: int
         :return: Lista de fretes válidos para o produto.
         :rtype: list
-        """        
+        """
         logger.info("Validando dimensões do produto.")
         tipos_validos = []
         cfg_dict = cls.cfg_frete
 
+        # Validação de peso
         if not peso <= 0:
 
             for key, value in cfg_dict.items():
 
+                # Validação de altura e largura
                 altura_valida = cfg_dict[key]['altura_min'] <= dimensao['altura'] <= cfg_dict[key]['altura_max']
                 largura_valida = cfg_dict[key]['largura_min'] <= dimensao['largura'] <= cfg_dict[key]['largura_max']
 
@@ -60,7 +62,7 @@ class CalculadorFrete():
         :type body: dict
         :return: Lista de dicionários contendo os resultados dos cálculos de frete.
         :rtype: list
-        """        
+        """
         tipos_validos = cls.validar(**body)
         lista_fretes = []
 
@@ -68,16 +70,20 @@ class CalculadorFrete():
 
             logger.info("Criando lista de fretes.")
             for tipo in tipos_validos:
-                cte_frete = cls.cfg_frete[tipo]['cte_frete']
+                cfg_dict = cls.cfg_frete
+
+                # Calculando frete
+                cte_frete = cfg_dict[tipo]['cte_frete']
                 frete = cte_frete * body['peso'] / 10
 
-                cfg_dict = cls.cfg_frete
+                # Dicionário final
                 dict_frete = {
                     'nome': cfg_dict[tipo]['nome'],
                     'valor_frete': frete,
                     'prazo_dias': cfg_dict[tipo]['prazo_dias']
                 }
 
+                # Lista com os dicionários finais
                 lista_fretes.append(dict_frete)
 
             logger.success("Lista criada.")
