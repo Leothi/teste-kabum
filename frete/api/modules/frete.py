@@ -1,5 +1,6 @@
 from loguru import logger
 
+
 class CalculadorFrete():
     cfg_frete = {
         'ninja': {
@@ -48,7 +49,7 @@ class CalculadorFrete():
         lista_fretes = []
 
         if tipos_validos:
-        
+
             logger.info("Criando lista de fretes.")
             for tipo in tipos_validos:
                 cte_frete = cls.cfg_frete[tipo]['cte_frete']
@@ -62,7 +63,7 @@ class CalculadorFrete():
                 }
 
                 lista_fretes.append(dict_frete)
-            
+
             logger.success("Lista criada.")
         else:
             logger.success("Dimensões inválidas para os fretes atuais.")
