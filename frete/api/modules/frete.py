@@ -26,6 +26,15 @@ class CalculadorFrete():
 
     @classmethod
     def validar(cls, dimensao: dict, peso: int) -> list:
+        """Valida o produto através de suas características.
+
+        :param dimensao: Dimensões do produto.
+        :type dimensao: dict
+        :param peso: Peso do produto.
+        :type peso: int
+        :return: Lista de fretes válidos para o produto.
+        :rtype: list
+        """        
         logger.info("Validando dimensões do produto.")
         tipos_validos = []
         cfg_dict = cls.cfg_frete
@@ -45,6 +54,13 @@ class CalculadorFrete():
 
     @classmethod
     def criar_lista_fretes(cls, body: dict) -> list:
+        """Cria a lista de fretes disponíveis para o produto.
+
+        :param body: Dicionário da requisição contendo informações do produto.
+        :type body: dict
+        :return: Lista de dicionários contendo os resultados dos cálculos de frete.
+        :rtype: list
+        """        
         tipos_validos = cls.validar(**body)
         lista_fretes = []
 
